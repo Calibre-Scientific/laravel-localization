@@ -57,6 +57,11 @@ class LocaleSessionRedirect extends LaravelLocalizationMiddlewareBase
         ) {
             app('session')->reflash();
             $redirection = app('laravellocalization')->getLocalizedURL($locale);
+            if(
+                app()->environment('production')
+            ) {
+                $redirection = str_replace('http://', 'https://', $redirection);
+            }
 
             return new RedirectResponse($redirection, 302, ['Vary' => 'Accept-Language']);
         }
